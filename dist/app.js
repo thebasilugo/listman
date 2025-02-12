@@ -36,12 +36,62 @@ elements.listContainer.addEventListener("click", handleListClick);
 elements.nameInput.addEventListener("change", updateUsername);
 elements.toggleThemeBtn.addEventListener("click", toggleTheme);
 document.addEventListener("DOMContentLoaded", updateYearRange);
+
 function initializeApp() {
 	loadStateFromStorage();
+	setInitialTheme();
 	renderTodos();
 	applyTheme();
+
 	elements.nameInput.value = state.username;
+	createContributionGrid();
+	updateStats();
+
+	// Set up interval to check time and update theme
+	setInterval(checkTimeAndUpdateTheme, 60000); // Check every minute
 }
+
+function setInitialTheme() {
+	const currentHour = new Date().getHours();
+	state.theme = currentHour >= 18 || currentHour < 8 ? "dark" : "light";
+	saveStateToStorage();
+}
+
+function checkTimeAndUpdateTheme() {
+	const currentHour = new Date().getHours();
+	const newTheme = currentHour >= 18 || currentHour < 8 ? "dark" : "light";
+	if (newTheme !== state.theme) {
+		state.theme = newTheme;
+		saveStateToStorage();
+		applyTheme();
+	}
+}
+
+function createContributionGrid() {
+	for (let i = 0; i < 35; i++) {
+		const day = document.createElement("div");
+		day.classList.add("day");
+		elements.contributionGrid.appendChild(day);
+	}
+	updateContributionGrid();
+}
+
+function updateContributionGrid() {
+	const completionRate =
+		state.todos.length > 0
+			? state.todos.filter((todo) => todo.completed).length / state.todos.length
+			: 0;
+	const level = Math.min(Math.floor(completionRate * 5), 5);
+	const today =
+		elements.contributionGrid.children[
+			elements.contributionGrid.children.length - 1
+		];
+	today.className = "day completion-" + level;
+
+	state.contributionGrid = { level, date: new Date().toISOString() };
+	saveStateToStorage();
+}
+
 function loadStateFromStorage() {
 	state.todos = JSON.parse(localStorage.getItem(STORAGE_KEYS.TODOS) || "[]");
 	state.username = localStorage.getItem(STORAGE_KEYS.USERNAME) || "";
