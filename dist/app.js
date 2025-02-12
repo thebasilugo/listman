@@ -21,11 +21,13 @@ const state = {
 	todos: [],
 	username: "",
 	theme: "light",
+	contributionGrid: { level: 0, date: new Date().toISOString() },
 };
 const STORAGE_KEYS = {
 	TODOS: "listman_todos",
 	USERNAME: "listman_username",
 	THEME: "listman_theme",
+	CONTRIBUTION_GRID: "listman_contribution_grid",
 };
 window.addEventListener("load", initializeApp);
 elements.addBtn.addEventListener("click", addTask);
