@@ -96,12 +96,21 @@ function loadStateFromStorage() {
 	state.todos = JSON.parse(localStorage.getItem(STORAGE_KEYS.TODOS) || "[]");
 	state.username = localStorage.getItem(STORAGE_KEYS.USERNAME) || "";
 	state.theme = localStorage.getItem(STORAGE_KEYS.THEME) || "light";
+	state.contributionGrid = JSON.parse(
+		localStorage.getItem(STORAGE_KEYS.CONTRIBUTION_GRID) || "{}"
+	);
 }
+
 function saveStateToStorage() {
 	localStorage.setItem(STORAGE_KEYS.TODOS, JSON.stringify(state.todos));
 	localStorage.setItem(STORAGE_KEYS.USERNAME, state.username);
 	localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
+	localStorage.setItem(
+		STORAGE_KEYS.CONTRIBUTION_GRID,
+		JSON.stringify(state.contributionGrid)
+	);
 }
+
 function renderTodos() {
 	if (elements.listContainer) {
 		elements.listContainer.innerHTML = state.todos
