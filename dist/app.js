@@ -12,6 +12,10 @@ const elements = {
 	toggleThemeBtn: $("#toggle-theme"),
 	toggleThemeIcon: $("#toggle-theme-icon"),
 	yearRangeElement: $("#year-range"),
+	totalTasksElement: $("#total-tasks"),
+	completedTasksElement: $("#completed-tasks"),
+	completionRateElement: $("#completion-rate"),
+	contributionGrid: $("#contribution-grid"),
 };
 const state = {
 	todos: [],
