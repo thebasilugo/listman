@@ -139,6 +139,7 @@ function renderTodos() {
 			.join("");
 	}
 }
+
 function addTask() {
 	const todoText = elements.inputBox.value.trim();
 	if (todoText === "") {
@@ -149,18 +150,22 @@ function addTask() {
 	elements.inputBox.value = "";
 	saveStateToStorage();
 	renderTodos();
+	updateContributionGrid();
+	updateStats();
 }
+
 function handleEnterKey(event) {
 	if (event.key === "Enter") {
 		event.preventDefault();
 		addTask();
 	}
 }
+
 function handleListClick(e) {
 	const target = e.target;
 	const listItem = target.closest(".list-item");
 	if (!listItem) return;
-	const todoId = parseInt(listItem.dataset.id);
+	const todoId = Number.parseInt(listItem.dataset.id);
 	if (target.closest(".delete-btn")) {
 		removeTodo(todoId);
 	} else if (target.closest(".edit-btn")) {
@@ -169,26 +174,35 @@ function handleListClick(e) {
 		toggleTodoComplete(todoId);
 	}
 }
+
 function removeTodo(id) {
 	state.todos.splice(id, 1);
 	saveStateToStorage();
 	renderTodos();
+	updateContributionGrid();
+	updateStats();
 }
+
 function toggleTodoComplete(id) {
 	state.todos[id].completed = !state.todos[id].completed;
 	saveStateToStorage();
 	renderTodos();
+	updateContributionGrid();
+	updateStats();
 }
+
 function updateUsername(e) {
 	const input = e.target;
 	state.username = input.value;
 	saveStateToStorage();
 }
+
 function toggleTheme() {
 	state.theme = state.theme === "light" ? "dark" : "light";
 	saveStateToStorage();
 	applyTheme();
 }
+
 function applyTheme() {
 	if (state.theme === "dark") {
 		document.body.classList.add("dark-mode");
@@ -200,6 +214,7 @@ function applyTheme() {
 		elements.toggleThemeIcon.classList.add("sun");
 	}
 }
+
 function showError(message) {
 	elements.renderError.textContent = message;
 	elements.renderError.classList.remove("hidden", "fade-out");
@@ -210,6 +225,7 @@ function showError(message) {
 		elements.renderError.textContent = "";
 	}, 2000);
 }
+
 function updateYearRange() {
 	const currentYear = new Date().getFullYear();
 	const createdYear = 2023;
@@ -218,6 +234,7 @@ function updateYearRange() {
 			? `${createdYear}`
 			: `${createdYear} - ${currentYear}`;
 }
+
 function toggleEdit(id) {
 	const listItem = elements.listContainer.querySelector(`[data-id="${id}"]`);
 	const todoText = listItem.querySelector(".todo-text");
@@ -242,6 +259,7 @@ function toggleEdit(id) {
 		});
 	}
 }
+
 function saveEdit(id, newText) {
 	if (newText === "") {
 		showError("Error. You cannot leave the todo empty!");
@@ -250,7 +268,20 @@ function saveEdit(id, newText) {
 	state.todos[id].text = newText;
 	saveStateToStorage();
 	renderTodos();
+	updateStats();
 }
+
+function updateStats() {
+	const totalTasks = state.todos.length;
+	const completedTasks = state.todos.filter((todo) => todo.completed).length;
+	const completionRate =
+		totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(1) : 0;
+
+	elements.totalTasksElement.textContent = totalTasks;
+	elements.completedTasksElement.textContent = completedTasks;
+	elements.completionRateElement.textContent = `${completionRate}%`;
+}
+
 filterButtons.forEach((button) => {
 	button.addEventListener("click", (e) => {
 		var _a;
