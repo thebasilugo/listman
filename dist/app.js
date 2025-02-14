@@ -284,12 +284,8 @@ function updateStats() {
 
 filterButtons.forEach((button) => {
 	button.addEventListener("click", (e) => {
-		var _a;
 		const filter = e.target.id.replace("filter-", "");
-		(_a = document.querySelector(".filter-btn.active")) === null ||
-		_a === void 0
-			? void 0
-			: _a.classList.remove("active");
+		document.querySelector(".filter-btn.active")?.classList.remove("active");
 		e.target.classList.add("active");
 		Array.from(listContainer.children).forEach((item) => {
 			if (filter === "all") {
