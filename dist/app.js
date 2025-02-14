@@ -116,13 +116,13 @@ function renderTodos() {
 		elements.listContainer.innerHTML = state.todos
 			.map(
 				(todo, index) => `
-        <li class="list-item list-none items-center justify-between my-1 rounded pl-1 opacity-70 transition-all duration-200 ease-in-out break-words dark:bg-gray-900 dark:text-gray-50 dark:hover:bg-gray-900 hover:bg-gray-100 hover:opacity-100 md:py-2 ${
+        <li class="list-item list-none items-center justify-between my-1 rounded pl-1 opacity-70 transition-all duration-200 ease-in-out break-words ${
 					todo.completed ? "checked" : ""
 				}" data-id="${index}">
           <span class="todo-text ${
 						todo.completed ? "completed" : ""
 					}" data-action="edit">${todo.text}</span>
-          <input type="text" class="todo-edit-input hidden text-gray-900 w-2/3 md:w-5/6" value="${
+          <input type="text" class="todo-edit-input hidden w-2/3 md:w-5/6 bg-opacity-20 bg-white text-white" value="${
 						todo.text
 					}" data-action="edit-input">
           <div class="todo-actions flex">
