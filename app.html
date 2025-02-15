@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+			rel="stylesheet"
+		/>
+		<title>ListMan</title>
+		<style>
+			:root {
+				--gradient-start-light: #f0f4ff;
+				--gradient-end-light: #e0e7ff;
+				--gradient-start-dark: #1a1c2e;
+				--gradient-end-dark: #2d1b47;
+				--text-color-light: #333;
+				--text-color-dark: #fff;
+				--glow-color-light: rgba(99, 102, 241, 0.2);
+				--glow-color-dark: rgba(99, 102, 241, 0.15);
+			}
+
+			body {
+				background: linear-gradient(
+					135deg,
+					var(--gradient-start-light),
+					var(--gradient-end-light)
+				);
+				color: var(--text-color-light);
+				min-height: 100vh;
+				transition: background 0.3s ease, color 0.3s ease;
+				margin: 0;
+			}
+
+			.hero-glow {
+				position: fixed;
+				width: 800px;
+				height: 800px;
+				background: radial-gradient(
+					circle,
+					var(--glow-color-light) 0%,
+					rgba(99, 102, 241, 0) 70%
+				);
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				pointer-events: none;
+				z-index: 0;
+				transition: background 0.3s ease;
+			}
+
+			.glass-morphism {
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+			}
+
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				100% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.fadeIn {
+				animation: fadeIn 0.4s ease-in-out;
+			}
+
+			/* List Item Styling */
+			.list-item {
+				display: flex;
+				list-style-type: none;
+				align-items: center;
+				justify-content: space-between;
+				margin: 0.25rem 0;
+				border-radius: 0.5rem;
+				padding-left: 0.25rem;
+				opacity: 0.7;
+				transition: background-color 0.2s, transform 0.2s ease-in-out;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+			}
+
+			.list-item:hover {
+				background-color: rgba(255, 255, 255, 0.2);
+				opacity: 1;
+				transform: scale(1.02);
+			}
+
+			.delete-btn {
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+			}
+
+			ul li.checked {
+				color: rgba(0, 0, 0, 0.5);
+			}
+
+			ul li.checked > span {
+				text-decoration: line-through;
+			}
+
+			ul li.checked .delete-btn,
+			ul li.checked .icon {
+				text-decoration: none;
+			}
+
+			.filter-btn {
+				margin: 0.5rem 0.5rem;
+				padding: 0.5rem 1rem;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: background-color 0.2s, color 0.2s ease-in-out;
+				background-color: rgba(255, 255, 255, 0.2);
+				color: var(--text-color-light);
+			}
+
+			.filter-btn:hover {
+				background-color: rgba(255, 255, 255, 0.3);
+			}
+
+			.filter-btn.active {
+				background-color: rgba(255, 255, 255, 0.4);
+			}
+
+			.hidden {
+				display: none;
+			}
+
+			/* Dark Mode Styles */
+			body.dark-mode {
+				background: linear-gradient(
+					135deg,
+					var(--gradient-start-dark),
+					var(--gradient-end-dark)
+				);
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .hero-glow {
+				background: radial-gradient(
+					circle,
+					var(--glow-color-dark) 0%,
+					rgba(99, 102, 241, 0) 70%
+				);
+			}
+
+			body.dark-mode #name {
+				background-color: rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .list-item {
+				background-color: rgba(255, 255, 255, 0.05);
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .list-item:hover {
+				background-color: rgba(255, 255, 255, 0.1);
+			}
+
+			body.dark-mode .input-todo-field {
+				background-color: rgba(255, 255, 255, 0.1);
+				color: var(--text-color-dark);
+				border-color: rgba(255, 255, 255, 0.2);
+			}
+
+			body.dark-mode .input-todo-field::placeholder {
+				color: rgba(255, 255, 255, 0.5);
+			}
+
+			body.dark-mode .filter-btn {
+				background-color: rgba(255, 255, 255, 0.1);
+				color: var(--text-color-dark);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+
+			body.dark-mode .filter-btn.active {
+				background-color: rgba(255, 255, 255, 0.2);
+			}
+
+			body.dark-mode .filter-btn:hover {
+				background-color: rgba(255, 255, 255, 0.15);
+			}
+
+			body.dark-mode .todo-app {
+				background-color: rgba(255, 255, 255, 0.05);
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .ui.icon.button {
+				background-color: rgba(255, 255, 255, 0.1);
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .ui.icon.button:hover {
+				background-color: rgba(255, 255, 255, 0.2);
+			}
+
+			/* Signature link hover adjustment */
+			body.dark-mode .signature a:hover {
+				color: #ffffff;
+				text-decoration: underline;
+			}
+
+			/* Footer Blur Effect */
+			.footer-blur {
+				backdrop-filter: blur(10px);
+			}
+
+			/* App Description Styles */
+			.app-description {
+				max-height: 0;
+				overflow: hidden;
+				transition: max-height 0.3s ease-out;
+			}
+
+			.app-description.show {
+				max-height: 2000px;
+				transition: max-height 0.5s ease-in;
+			}
+
+			.feature-list {
+				list-style-type: disc;
+				margin-left: 1.5rem;
+			}
+
+			.contribution-grid {
+				display: grid;
+				grid-template-columns: repeat(7, 1fr);
+				gap: 4px;
+			}
+
+			.day {
+				width: 15px;
+				height: 15px;
+				border-radius: 2px;
+				background: rgba(255, 255, 255, 0.3);
+				transition: all 0.3s ease;
+			}
+
+			.day:hover {
+				transform: scale(1.2);
+			}
+
+			.completion-0 {
+				background: rgba(255, 255, 255, 0.3);
+			}
+			.completion-1 {
+				background: rgba(74, 222, 128, 0.2);
+			}
+			.completion-2 {
+				background: rgba(74, 222, 128, 0.4);
+			}
+			.completion-3 {
+				background: rgba(74, 222, 128, 0.6);
+			}
+			.completion-4 {
+				background: rgba(74, 222, 128, 0.8);
+			}
+			.completion-5 {
+				background: rgba(74, 222, 128, 1);
+			}
+
+			.stats-container {
+				display: flex;
+				justify-content: space-around;
+				margin-top: 2rem;
+			}
+
+			.stat-item {
+				text-align: center;
+			}
+
+			.stat-value {
+				font-size: 1.5rem;
+				font-weight: bold;
+				margin-bottom: 0.5rem;
+			}
+
+			.stat-label {
+				font-size: 0.9rem;
+				color: rgba(0, 0, 0, 0.7);
+			}
+		</style>
+	</head>
+	<body class="fadeIn">
+		<div class="hero-glow"></div>
+		<div
+			class="container mx-auto p-4 md:p-8 max-w-xl sm:max-w-3xl relative z-10"
+		>
+			<h1
+				class="text-3xl font-bold mb-4 text-center flex justify-between items-center mr-4"
+			>
+				ListMan
+				<div class="nav-btns">
+					<button id="toggle-theme" class="ui icon button circular">
+						<i id="toggle-theme-icon" class="moon icon"></i>
+					</button>
+				</div>
+			</h1>
+
+			<div class="todo-app glass-morphism p-4 rounded-xl shadow">
+				<div class="greeting mb-4">
+					<h2 class="title text-xl sm:text-md text-center">
+						Hey there,
+						<input
+							type="text"
+							id="name"
+							placeholder="Enter your name"
+							class="border text-gray-900 p-1 rounded-lg w-3/5 sm:w-2/4 outline-none bg-opacity-20 bg-white"
+						/>
+					</h2>
+				</div>
+				<div class="renderInfo mb-4">
+					<span id="error" class="text-red-700 text-center hidden"></span>
+				</div>
+				<div class="input-row flex items-center mb-4">
+					<input
+						class="input-todo-field border p-2 rounded flex-grow mr-3 outline-none text-lg sm:text-xl bg-opacity-20 bg-white"
+						type="text"
+						id="input-box"
+						placeholder="e.g., play the guitar..."
+						autofocus
+					/>
+					<button id="add-btn" class="ui icon button circular">
+						<i class="plus icon"></i>
+					</button>
+				</div>
+
+				<div class="filter-row flex justify-center mb-4">
+					<button id="filter-all" class="filter-btn active">All</button>
+					<button id="filter-completed" class="filter-btn">Completed</button>
+					<button id="filter-incomplete" class="filter-btn">Incomplete</button>
+				</div>
+				<ul id="list-container" class="list-disc text-xl flex flex-col"></ul>
+			</div>
+
+			<div class="stats-container glass-morphism rounded-xl p-4 mt-8">
+				<div class="stat-item">
+					<div class="stat-value" id="total-tasks">0</div>
+					<div class="stat-label">Total Tasks</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value" id="completed-tasks">0</div>
+					<div class="stat-label">Completed Tasks</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value" id="completion-rate">0%</div>
+					<div class="stat-label">Completion Rate</div>
+				</div>
+			</div>
+
+			<div class="text-center mt-8 mb-16">
+				<h2 class="text-2xl font-semibold mb-4">Your Productivity Journey</h2>
+				<div
+					id="contribution-grid"
+					class="contribution-grid max-w-md mx-auto p-4 glass-morphism rounded-xl"
+				></div>
+			</div>
+
+			<div class="signature mt-4">
+				<footer
+					class="text-gray-600 dark:text-gray-300 text-center fixed bottom-0 left-0 right-0 z-50 footer-blur p-4"
+				>
+					&copy; <span id="year-range"></span>
+					&ThinSpace;
+					<a
+						href="https://thebasilugo.github.io/portfolio"
+						class="hover:text-gray-900 dark:hover:text-white hover:underline"
+						target="_blank"
+						>thebasilugo</a
+					>
+					|
+					<a
+						href="index.html"
+						class="hover:text-gray-900 dark:hover:text-white hover:underline"
+						>Back to Landing Page</a
+					>
+				</footer>
+			</div>
+		</div>
+		<script src="dist/app.js"></script>
+	</body>
+</html>
