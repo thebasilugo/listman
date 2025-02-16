@@ -20,6 +20,156 @@
 		/>
 		<title>ListMan</title>
 		<style>
+			:root {
+				--gradient-start-light: #f0f4ff;
+				--gradient-end-light: #e0e7ff;
+				--gradient-start-dark: #1a1c2e;
+				--gradient-end-dark: #2d1b47;
+				--text-color-light: #333;
+				--text-color-dark: #fff;
+				--glow-color-light: rgba(99, 102, 241, 0.2);
+				--glow-color-dark: rgba(99, 102, 241, 0.15);
+			}
+
+			body {
+				background: linear-gradient(
+					135deg,
+					var(--gradient-start-light),
+					var(--gradient-end-light)
+				);
+				color: var(--text-color-light);
+				min-height: 100vh;
+				margin: 0;
+				transition: background 0.3s ease, color 0.3s ease;
+			}
+
+			.hero-glow {
+				position: absolute;
+				width: 800px;
+				height: 800px;
+				background: radial-gradient(
+					circle,
+					var(--glow-color-light) 0%,
+					rgba(99, 102, 241, 0) 70%
+				);
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				pointer-events: none;
+				z-index: 0;
+				transition: background 0.3s ease;
+			}
+
+			.glass-morphism {
+				background: rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+			}
+
+			.task-input {
+				background: rgba(255, 255, 255, 0.2);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				color: var(--text-color-light);
+				transition: all 0.3s ease;
+			}
+
+			.task-input:focus {
+				background: rgba(255, 255, 255, 0.3);
+				border-color: rgba(255, 255, 255, 0.4);
+			}
+
+			@keyframes float {
+				0% {
+					transform: translateY(0px);
+				}
+				50% {
+					transform: translateY(-20px);
+				}
+				100% {
+					transform: translateY(0px);
+				}
+			}
+
+			.floating {
+				animation: float 6s ease-in-out infinite;
+			}
+
+			.contribution-grid {
+				display: grid;
+				grid-template-columns: repeat(7, 1fr);
+				gap: 4px;
+			}
+
+			.day {
+				width: 15px;
+				height: 15px;
+				border-radius: 2px;
+				background: rgba(255, 255, 255, 0.3);
+				transition: all 0.3s ease;
+			}
+
+			.day:hover {
+				transform: scale(1.2);
+			}
+
+			.completion-0 {
+				background: rgba(255, 255, 255, 0.3);
+			}
+			.completion-1 {
+				background: rgba(74, 222, 128, 0.2);
+			}
+			.completion-2 {
+				background: rgba(74, 222, 128, 0.4);
+			}
+			.completion-3 {
+				background: rgba(74, 222, 128, 0.6);
+			}
+			.completion-4 {
+				background: rgba(74, 222, 128, 0.8);
+			}
+			.completion-5 {
+				background: rgba(74, 222, 128, 1);
+			}
+
+			.feature-icon {
+				font-size: 2rem;
+				margin-bottom: 1rem;
+			}
+
+			.testimonial {
+				background: rgba(255, 255, 255, 0.2);
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 20px;
+			}
+
+			.testimonial-author {
+				font-weight: bold;
+				margin-top: 10px;
+			}
+
+			.stats-container {
+				display: flex;
+				justify-content: space-around;
+				margin-top: 2rem;
+			}
+
+			.stat-item {
+				text-align: center;
+			}
+
+			.stat-value {
+				font-size: 2rem;
+				font-weight: bold;
+				margin-bottom: 0.5rem;
+			}
+
+			.stat-label {
+				font-size: 0.9rem;
+				color: rgba(0, 0, 0, 0.7);
+			}
+
 			@keyframes fadeIn {
 				0% {
 					opacity: 0;
