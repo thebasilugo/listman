@@ -185,11 +185,6 @@
 				animation: fadeIn 0.4s ease-in-out;
 			}
 
-			body {
-				transition: all 0.2s ease-in-out;
-				margin: 0;
-			}
-
 			/* List Item Styling */
 			.list-item {
 				display: flex;
@@ -201,12 +196,12 @@
 				padding-left: 0.25rem;
 				opacity: 0.7;
 				transition: background-color 0.2s, transform 0.2s ease-in-out;
-				word-wrap: break-word; /* Ensures the word breaks and wraps */
-				overflow-wrap: break-word; /* Ensures long words wrap */
+				word-wrap: break-word;
+				overflow-wrap: break-word;
 			}
 
 			.list-item:hover {
-				background-color: #edf2f7;
+				background-color: rgba(255, 255, 255, 0.2);
 				opacity: 1;
 				transform: scale(1.02);
 			}
@@ -218,7 +213,7 @@
 			}
 
 			ul li.checked {
-				color: rgb(126, 126, 126);
+				color: rgba(0, 0, 0, 0.5);
 			}
 
 			ul li.checked > span {
@@ -236,11 +231,12 @@
 				border-radius: 5px;
 				cursor: pointer;
 				transition: background-color 0.2s, color 0.2s ease-in-out;
+				background-color: rgba(255, 255, 255, 0.2);
+				color: var(--text-color-light);
 			}
 
 			.filter-btn:hover {
-				background-color: rgba(0, 0, 0, 0.5);
-				color: #ffffff;
+				background-color: rgba(255, 255, 255, 0.3);
 			}
 
 			.filter-btn.active {
@@ -304,12 +300,12 @@
 			}
 
 			body.dark-mode .ui.icon.button {
-				background-color: #333333;
-				color: #e0e0e0;
+				background-color: rgba(255, 255, 255, 0.1);
+				color: var(--text-color-dark);
 			}
 
 			body.dark-mode .ui.icon.button:hover {
-				background-color: #444444;
+				background-color: rgba(255, 255, 255, 0.2);
 			}
 
 			/* Signature link hover adjustment */
@@ -321,6 +317,23 @@
 			/* Footer Blur Effect */
 			.footer-blur {
 				backdrop-filter: blur(10px);
+			}
+
+			/* App Description Styles */
+			.app-description {
+				max-height: 0;
+				overflow: hidden;
+				transition: max-height 0.3s ease-out;
+			}
+
+			.app-description.show {
+				max-height: 2000px;
+				transition: max-height 0.5s ease-in;
+			}
+
+			.feature-list {
+				list-style-type: disc;
+				margin-left: 1.5rem;
 			}
 		</style>
 	</head>
