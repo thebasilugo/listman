@@ -240,8 +240,7 @@
 			}
 
 			.filter-btn.active {
-				background-color: rgba(0, 0, 0, 0.8);
-				color: #fff;
+				background-color: rgba(255, 255, 255, 0.4);
 			}
 
 			.hidden {
@@ -250,13 +249,26 @@
 
 			/* Dark Mode Styles */
 			body.dark-mode {
-				background-color: #1a1a1a;
-				color: #e0e0e0;
+				background: linear-gradient(
+					135deg,
+					var(--gradient-start-dark),
+					var(--gradient-end-dark)
+				);
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .hero-glow {
+				background: radial-gradient(
+					circle,
+					var(--glow-color-dark) 0%,
+					rgba(99, 102, 241, 0) 70%
+				);
 			}
 
 			body.dark-mode #name {
-				background-color: #262626;
+				background-color: rgba(255, 255, 255, 0.1);
 				border: 1px solid rgba(255, 255, 255, 0.2);
+				color: var(--text-color-dark);
 			}
 
 			body.dark-mode .list-item {
