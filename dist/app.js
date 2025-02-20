@@ -1,4 +1,3 @@
-"use strict";
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 const listContainer = document.getElementById("list-container");
