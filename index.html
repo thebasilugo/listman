@@ -406,28 +406,273 @@
 						Add
 					</button>
 				</div>
-				<div class="filter-row flex justify-center mb-4">
-					<button id="filter-all" class="filter-btn active">All</button>
-					<button id="filter-completed" class="filter-btn">Completed</button>
-					<button id="filter-incomplete" class="filter-btn">Incomplete</button>
-				</div>
-				<ul id="list-container" class="list-disc text-xl flex flex-col"></ul>
-			</div>
-			<div class="signature mt-4">
-				<footer
-					class="text-gray-500 text-center fixed bottom-0 left-0 right-0 z-50 footer-blur p-4 dark:text-gray-300"
+				<ul id="task-list" class="space-y-3"></ul>
+				<p
+					id="launch-app-message"
+					class="text-center mt-4 text-yellow-600 dark:text-yellow-300 hidden"
 				>
-					&copy; <span id="year-range"></span>
-					&ThinSpace;
-					<a
-						href="https://thebasilugo.github.io/portfolio"
-						class="hover:text-gray-500 hover:underline"
-						target="_blank"
-						>thebasilugo</a
-					>
-				</footer>
+					Please launch the app to add more todos.
+				</p>
 			</div>
-		</div>
-		<script src="dist/app.js"></script>
+
+			<div class="text-center mb-16">
+				<h2 class="text-2xl font-semibold mb-4">Your Productivity Journey</h2>
+				<div
+					id="contribution-grid"
+					class="contribution-grid max-w-md mx-auto p-4 glass-morphism rounded-xl"
+				></div>
+			</div>
+
+			<div id="features" class="grid md:grid-cols-3 gap-8 mb-20">
+				<div
+					class="glass-morphism rounded-xl p-6 hover:transform hover:scale-105 transition-transform"
+				>
+					<i class="fas fa-magic feature-icon text-indigo-400"></i>
+					<h3 class="text-xl font-semibold mb-3">Simple & Intuitive</h3>
+					<p class="text-gray-600 dark:text-gray-300">
+						Clean interface designed for maximum productivity
+					</p>
+				</div>
+				<div
+					class="glass-morphism rounded-xl p-6 hover:transform hover:scale-105 transition-transform"
+				>
+					<i class="fas fa-chart-line feature-icon text-green-400"></i>
+					<h3 class="text-xl font-semibold mb-3">Track Progress</h3>
+					<p class="text-gray-600 dark:text-gray-300">
+						Visualize your productivity with our contribution grid
+					</p>
+				</div>
+				<div
+					class="glass-morphism rounded-xl p-6 hover:transform hover:scale-105 transition-transform"
+				>
+					<i class="fas fa-tasks feature-icon text-yellow-400"></i>
+					<h3 class="text-xl font-semibold mb-3">Stay Organized</h3>
+					<p class="text-gray-600 dark:text-gray-300">
+						Keep your tasks organized and never miss a deadline
+					</p>
+				</div>
+			</div>
+
+			<div id="testimonials" class="mb-20">
+				<h2 class="text-3xl font-bold mb-8 text-center">What Our Users Say</h2>
+				<div class="grid md:grid-cols-2 gap-8">
+					<div class="testimonial">
+						<p>
+							"ListMan has completely transformed how I manage my tasks. It's
+							simple, yet powerful!"
+						</p>
+						<p class="testimonial-author">- Sarah J.</p>
+					</div>
+					<div class="testimonial">
+						<p>
+							"I love the visual progress tracking. It keeps me motivated to
+							complete my tasks every day."
+						</p>
+						<p class="testimonial-author">- Mike T.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="stats-container glass-morphism rounded-xl p-8 mb-20">
+				<div class="stat-item">
+					<div class="stat-value" id="total-tasks">0</div>
+					<div class="stat-label">Total Tasks</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value" id="completed-tasks">0</div>
+					<div class="stat-label">Completed Tasks</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value" id="completion-rate">0%</div>
+					<div class="stat-label">Completion Rate</div>
+				</div>
+			</div>
+		</main>
+
+		<footer
+			class="relative z-10 container mx-auto px-6 py-8 text-center text-gray-600 dark:text-gray-400"
+		>
+			<p>
+				&copy; 2023 ListMan. Created by
+				<a
+					href="https://thebasilugo.github.io/portfolio"
+					class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+					>thebasilugo</a
+				>
+			</p>
+		</footer>
+
+		<script>
+			const taskInput = document.getElementById("task-input");
+			const addTaskButton = document.getElementById("add-task");
+			const taskList = document.getElementById("task-list");
+			const contributionGrid = document.getElementById("contribution-grid");
+			const totalTasksElement = document.getElementById("total-tasks");
+			const completedTasksElement = document.getElementById("completed-tasks");
+			const completionRateElement = document.getElementById("completion-rate");
+			const launchAppMessage = document.getElementById("launch-app-message");
+
+			// Initialize tasks array and load from localStorage
+			let tasks = JSON.parse(localStorage.getItem("demo_tasks") || "[]");
+
+			// Create contribution grid
+			function createContributionGrid() {
+				for (let i = 0; i < 35; i++) {
+					const day = document.createElement("div");
+					day.classList.add("day");
+					contributionGrid.appendChild(day);
+				}
+				updateContributionGrid();
+			}
+
+			// Update contribution grid based on task completion
+			function updateContributionGrid() {
+				const completionRate =
+					tasks.length > 0
+						? tasks.filter((task) => task.completed).length / tasks.length
+						: 0;
+				const level = Math.min(Math.floor(completionRate * 5), 5);
+				const today =
+					contributionGrid.children[contributionGrid.children.length - 1];
+				today.className = "day completion-" + level;
+
+				// Save contribution grid data to localStorage
+				localStorage.setItem(
+					"contribution_grid",
+					JSON.stringify({ level, date: new Date().toISOString() })
+				);
+			}
+
+			// Add new task
+			function addTask() {
+				const text = taskInput.value.trim();
+				if (text && tasks.length < 3) {
+					const task = {
+						id: Date.now(),
+						text,
+						completed: false,
+						createdAt: new Date(),
+					};
+					tasks.push(task);
+					renderTask(task);
+					taskInput.value = "";
+					saveTasks();
+					updateContributionGrid();
+					updateStats();
+				}
+				if (tasks.length >= 3) {
+					taskInput.disabled = true;
+					addTaskButton.disabled = true;
+					launchAppMessage.classList.remove("hidden");
+				}
+			}
+
+			// Render single task
+			function renderTask(task) {
+				const li = document.createElement("li");
+				li.className =
+					"flex items-center justify-between glass-morphism rounded-lg p-3";
+				li.innerHTML = `
+					<div class="flex items-center gap-3">
+						<input type="checkbox" ${task.completed ? "checked" : ""} 
+							class="w-5 h-5 rounded border-gray-400">
+						<span class="${task.completed ? "line-through text-gray-400" : ""}">${
+					task.text
+				}</span>
+					</div>
+					<button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 w-4 flex">
+						<i class="fas fa-trash-alt"></i>
+					</button>
+				`;
+
+				const checkbox = li.querySelector("input");
+				checkbox.addEventListener("change", () => toggleTask(task.id));
+
+				const deleteBtn = li.querySelector("button");
+				deleteBtn.addEventListener("click", () => deleteTask(task.id));
+
+				taskList.appendChild(li);
+			}
+
+			// Toggle task completion
+			function toggleTask(id) {
+				tasks = tasks.map((task) =>
+					task.id === id ? { ...task, completed: !task.completed } : task
+				);
+				saveTasks();
+				renderTasks();
+				updateContributionGrid();
+				updateStats();
+			}
+
+			// Delete task
+			function deleteTask(id) {
+				tasks = tasks.filter((task) => task.id !== id);
+				saveTasks();
+				renderTasks();
+				updateContributionGrid();
+				updateStats();
+				if (tasks.length < 3) {
+					taskInput.disabled = false;
+					addTaskButton.disabled = false;
+					launchAppMessage.classList.add("hidden");
+				}
+			}
+
+			// Save tasks to localStorage
+			function saveTasks() {
+				localStorage.setItem("demo_tasks", JSON.stringify(tasks));
+			}
+
+			// Render all tasks
+			function renderTasks() {
+				taskList.innerHTML = "";
+				tasks.forEach(renderTask);
+			}
+
+			// Update statistics
+			function updateStats() {
+				const totalTasks = tasks.length;
+				const completedTasks = tasks.filter((task) => task.completed).length;
+				const completionRate =
+					totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(1) : 0;
+
+				totalTasksElement.textContent = totalTasks;
+				completedTasksElement.textContent = completedTasks;
+				completionRateElement.textContent = `${completionRate}%`;
+			}
+
+			// Event listeners
+			addTaskButton.addEventListener("click", addTask);
+			taskInput.addEventListener("keypress", (e) => {
+				if (e.key === "Enter") addTask();
+			});
+
+			// Initialize
+			createContributionGrid();
+			renderTasks();
+			updateStats();
+
+			// Set initial theme
+			function setInitialTheme() {
+				const currentHour = new Date().getHours();
+				const theme = currentHour >= 18 || currentHour < 8 ? "dark" : "light";
+				document.body.classList.toggle("dark-mode", theme === "dark");
+			}
+
+			// Check time and update theme
+			function checkTimeAndUpdateTheme() {
+				const currentHour = new Date().getHours();
+				const newTheme =
+					currentHour >= 18 || currentHour < 8 ? "dark" : "light";
+				document.body.classList.toggle("dark-mode", newTheme === "dark");
+			}
+
+			// Set initial theme on load
+			setInitialTheme();
+
+			// Check and update theme every minute
+			setInterval(checkTimeAndUpdateTheme, 60000);
+		</script>
 	</body>
 </html>
