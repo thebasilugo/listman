@@ -347,43 +347,63 @@
 			}
 		</style>
 	</head>
-	<body class="fadeIn bg-gray-100 my-8">
-		<div class="container mx-auto p-4 md:p-8 max-w-xl sm:max-w-4xl">
-			<h1
-				class="text-3xl font-bold mb-4 text-center flex justify-between items-center mr-4"
+	<body class="fadeIn font-sans max-w-6xl mx-auto">
+		<div class="hero-glow"></div>
+
+		<nav
+			class="relative z-10 container mx-auto px-6 py-4 flex justify-between items-center"
+		>
+			<div class="text-2xl font-bold">ListMan</div>
+			<div class="space-x-8">
+				<a href="#features" class="hover:text-indigo-300 transition-colors"
+					>Features</a
+				>
+				<a href="#demo" class="hover:text-indigo-300 transition-colors"
+					>Try It</a
+				>
+				<a href="#testimonials" class="hover:text-indigo-300 transition-colors"
+					>Testimonials</a
+				>
+				<a
+					href="app.html"
+					class="bg-indigo-600 px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+					>Launch App</a
+				>
+			</div>
+		</nav>
+
+		<main class="relative z-10 container mx-auto px-6 pt-20">
+			<div class="text-center mb-16">
+				<h1 class="text-5xl md:text-6xl font-bold mb-6">
+					Organize Your Life,<br />One Task at a Time
+				</h1>
+				<p class="text-xl text-gray-600 dark:text-gray-300 mb-12">
+					Experience the most intuitive way to manage your daily tasks
+				</p>
+				<a
+					href="#demo"
+					class="bg-indigo-600 px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors text-lg font-semibold text-white"
+					>Get Started</a
+				>
+			</div>
+
+			<div
+				id="demo"
+				class="max-w-2xl mx-auto glass-morphism rounded-xl p-8 mb-20"
 			>
-				ListMan
-				<div class="nav-btns">
-					<button id="toggle-theme" class="ui icon button circular">
-						<i id="toggle-theme-icon" class="moon icon"></i>
-					</button>
-				</div>
-			</h1>
-			<div class="todo-app bg-white p-4 rounded-xl shadow">
-				<div class="greeting mb-4">
-					<h2 class="title text-xl sm:text-md text-center">
-						Hey there,
-						<input
-							type="text"
-							id="name"
-							placeholder="Enter your name"
-							class="border text-gray-900 p-1 rounded-lg w-3/5 sm:w-2/4 outline-none"
-						/>
-					</h2>
-				</div>
-				<div class="renderInfo mb-4">
-					<span id="error" class="text-red-700 text-center hidden"></span>
-				</div>
-				<div class="input-row flex items-center mb-4">
+				<h2 class="text-3xl font-bold mb-6 text-center">Try ListMan Now</h2>
+				<div class="flex gap-4 mb-6">
 					<input
-						class="input-todo-field border p-2 rounded flex-grow mr-3 outline-none text-lg sm:text-xl text-gray-950"
 						type="text"
-						id="input-box"
-						placeholder="e.g., play the guitar..."
-						autofocus
+						id="task-input"
+						class="task-input w-full px-4 py-3 rounded-lg outline-none"
+						placeholder="Add a task..."
 					/>
-					<button id="add-btn" class="ui icon button circular">
-						<i class="plus icon"></i>
+					<button
+						id="add-task"
+						class="bg-indigo-600 px-6 rounded-lg hover:bg-indigo-700 transition-colors text-white"
+					>
+						Add
 					</button>
 				</div>
 				<div class="filter-row flex justify-center mb-4">
