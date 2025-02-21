@@ -349,6 +349,139 @@
 				list-style-type: disc;
 				margin-left: 1.5rem;
 			}
+
+			/* New styles for improved landing page */
+			.hero-image {
+				max-width: 100%;
+				height: auto;
+				border-radius: 10px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			}
+
+			.feature-card {
+				transition: transform 0.3s ease-in-out;
+			}
+
+			.feature-card:hover {
+				transform: translateY(-5px);
+			}
+
+			.cta-button {
+				transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+			}
+
+			.cta-button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			}
+
+			.testimonial-card {
+				transition: transform 0.3s ease-in-out;
+			}
+
+			.testimonial-card:hover {
+				transform: translateY(-5px);
+			}
+
+			.faq-item {
+				transition: background-color 0.3s ease-in-out;
+			}
+
+			.faq-item:hover {
+				background-color: rgba(255, 255, 255, 0.1);
+			}
+
+			.faq-question {
+				cursor: pointer;
+			}
+
+			.faq-answer {
+				max-height: 0;
+				overflow: hidden;
+				transition: max-height 0.3s ease-out;
+			}
+
+			.faq-answer.show {
+				max-height: 500px;
+				transition: max-height 0.5s ease-in;
+			}
+
+			/* Mobile-friendly styles */
+			.mobile-menu {
+				display: none;
+			}
+
+			@media (max-width: 768px) {
+				.desktop-menu {
+					display: none;
+				}
+
+				.mobile-menu {
+					display: block;
+				}
+
+				.mobile-menu-content {
+					display: none;
+					position: absolute;
+					top: 60px;
+					left: 0;
+					right: 0;
+					background-color: rgba(255, 255, 255, 0.9);
+					padding: 1rem;
+					box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				}
+
+				.mobile-menu-content.show {
+					display: block;
+				}
+
+				.mobile-menu-content a {
+					display: block;
+					padding: 0.5rem 0;
+					color: var(--text-color-light);
+					text-decoration: none;
+				}
+
+				.hamburger {
+					font-size: 1.5rem;
+					cursor: pointer;
+				}
+			}
+
+			/* Contact section styles */
+			.contact-section {
+				background-color: rgba(255, 255, 255, 0.1);
+				padding: 2rem 0;
+				margin-top: 2rem;
+			}
+
+			.contact-icons {
+				display: flex;
+				justify-content: center;
+				gap: 1.5rem;
+			}
+
+			.contact-icons a {
+				font-size: 1.5rem;
+				color: var(--text-color-light);
+				transition: color 0.3s ease;
+			}
+
+			.contact-icon {
+				transition: transform 0.25s ease;
+			}
+
+			.contact-icon:hover {
+				transform: translateY(-2px);
+			}
+
+			body.dark-mode .contact-icons a {
+				color: var(--text-color-dark);
+			}
+
+			body.dark-mode .contact-icons a:hover {
+				color: var(--primary-color-dark);
+			}
 		</style>
 	</head>
 	<body class="fadeIn font-sans max-w-6xl mx-auto">
