@@ -21,12 +21,14 @@ const state = {
 	username: "",
 	theme: "light",
 	contributionGrid: { level: 0, date: new Date().toISOString() },
+	completedTodos: [],
 };
 const STORAGE_KEYS = {
 	TODOS: "listman_todos",
 	USERNAME: "listman_username",
 	THEME: "listman_theme",
 	CONTRIBUTION_GRID: "listman_contribution_grid",
+	COMPLETED_TODOS: "listman_completed_todos",
 };
 window.addEventListener("load", initializeApp);
 elements.addBtn.addEventListener("click", addTask);
@@ -45,6 +47,9 @@ function initializeApp() {
 	elements.nameInput.value = state.username;
 	createContributionGrid();
 	updateStats();
+
+	// Add default task if it's a new day
+	addDefaultTask();
 
 	// Set up interval to check time and update theme
 	setInterval(checkTimeAndUpdateTheme, 60000); // Check every minute
@@ -98,6 +103,9 @@ function loadStateFromStorage() {
 	state.contributionGrid = JSON.parse(
 		localStorage.getItem(STORAGE_KEYS.CONTRIBUTION_GRID) || "{}"
 	);
+	state.completedTodos = JSON.parse(
+		localStorage.getItem(STORAGE_KEYS.COMPLETED_TODOS) || "[]"
+	);
 }
 
 function saveStateToStorage() {
@@ -107,6 +115,10 @@ function saveStateToStorage() {
 	localStorage.setItem(
 		STORAGE_KEYS.CONTRIBUTION_GRID,
 		JSON.stringify(state.contributionGrid)
+	);
+	localStorage.setItem(
+		STORAGE_KEYS.COMPLETED_TODOS,
+		JSON.stringify(state.completedTodos)
 	);
 }
 
@@ -118,9 +130,14 @@ function renderTodos() {
         <li class="list-item list-none items-center justify-between my-1 rounded pl-1 opacity-70 transition-all duration-200 ease-in-out break-words ${
 					todo.completed ? "checked" : ""
 				}" data-id="${index}">
-          <span class="todo-text ${
-						todo.completed ? "completed" : ""
-					}" data-action="edit">${todo.text}</span>
+          <div class="flex flex-col">
+            <span class="todo-text ${
+							todo.completed ? "completed" : ""
+						}" data-action="edit">${todo.text}</span>
+            <span class="task-info">Created: ${new Date(
+							todo.createdAt
+						).toLocaleString()}</span>
+          </div>
           <input type="text" class="todo-edit-input hidden w-2/3 md:w-5/6 bg-opacity-20 bg-white text-white" value="${
 						todo.text
 					}" data-action="edit-input">
@@ -183,7 +200,16 @@ function removeTodo(id) {
 }
 
 function toggleTodoComplete(id) {
-	state.todos[id].completed = !state.todos[id].completed;
+	const todo = state.todos[id];
+	todo.completed = !todo.completed;
+	if (todo.completed) {
+		state.completedTodos.push({ ...todo, completedAt: new Date() });
+	} else {
+		const index = state.completedTodos.findIndex((t) => t.text === todo.text);
+		if (index !== -1) {
+			state.completedTodos.splice(index, 1);
+		}
+	}
 	saveStateToStorage();
 	renderTodos();
 	updateContributionGrid();
@@ -297,3 +323,24 @@ filterButtons.forEach((button) => {
 		});
 	});
 });
+
+function addDefaultTask() {
+	const today = new Date().toDateString();
+	const lastAddedDate = localStorage.getItem("lastAddedDate");
+
+	if (lastAddedDate !== today) {
+		const defaultTask = {
+			text: "Check out more thebasilugo projects",
+			completed: false,
+			createdAt: new Date(),
+		};
+		state.todos.unshift(defaultTask);
+		saveStateToStorage();
+		renderTodos();
+		updateStats();
+		localStorage.setItem("lastAddedDate", today);
+	}
+}
+
+// Initialize the app
+initializeApp();
